@@ -7,7 +7,7 @@ Book
   LOCATION
   - case_id
   - shelf_id
-  - room_id (through case) <-- don't need this one 
+  - room_id (through case) <-- don't need this one
 
 Case
   - room_id
