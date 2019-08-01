@@ -6,6 +6,8 @@ class CreateBooks < ActiveRecord::Migration
       t.string :topic
       t.integer :case_id
       t.integer :shelf_id
-    end 
+
+      t.timestamps null: false
+    end
   end
 end
