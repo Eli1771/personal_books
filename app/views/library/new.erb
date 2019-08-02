@@ -1,11 +1,29 @@
 <h1>Start building your library!</h1>
 
 <form action="/lib" method="post">
-  
+
   <!--book-->
-  <input type="text" name="book[title]">
-  <input type="text" name="book[auther]">
-  <input type="text" name="book[topic]">
+  <h3>Create A Book</h3>
+  <label for="book_title">Title: </label>
+  <input type="text" name="book[title]" id="book_title"><br>
+  <%= '<p>Select Author(s)</p>' if !@authors.empty? %>
+  <% @authors.each do |author| %>
+    <input type="checkbox" name="book[authors]" value="<%= author.id %>">
+  <% end %>
+  <p>Or Create a New Author</p><br>
+  <label for="book_author">Author Name: </label>
+  <input type="text" name="author[name]" id="book_authors"><br>
+
+
+  <h3>FINISH LATER</h3>
+
+  <%= '<p>Select a Topic</p>' if !@topics.empty? %>
+  <% @topics.each do |topic| %>
+    <input type="radio" name="book[topic]" value="<%= topic.id %>">
+  <% end %>
+  <p>Or Create a New Topic</p><br>
+  <label for="book_topic">Topic: </label>
+  <input type="text" name="topic[name]" id="book_topic"><br>
 
   <!--case-->
   <input type="text" name="case[name]">
@@ -14,6 +32,8 @@
 
   <!--room-->
   <input type="text" name="room[name]">
+
+  <input type="submit" value="Create Book" id="submit">
 
 </form>
 

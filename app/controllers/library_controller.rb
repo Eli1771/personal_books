@@ -4,11 +4,17 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/new' do
+    @authors = Author.all
+    @topics = Topic.all
     erb :'/library/new'
   end
 
   post '/lib' do
+    binding.pry
+    @book = Book.create(params["book"])
+    @author = Author.create(params["Randy Alcorn"]) if !params["author"]["name"].empty?
 
+    redirect to '/lib'
   end
 
   get '/lib/room/:id' do
