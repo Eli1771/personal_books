@@ -9,8 +9,8 @@
 
   <%= '<p>Select Author(s)</p>' if !@authors.empty? %>
   <% @authors.each do |author| %>
-    <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="<%= author.id %>">
-    <label for="<%= author.id %>"><%= author.name %></label><br>
+    <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="author_<%= author.id %>">
+    <label for="author_<%= author.id %>"><%= author.name %></label><br>
   <% end %>
   <br><br>
   <%= '<p>Or Create a New Author</p>' if !@authors.empty? %>
@@ -19,8 +19,8 @@
 
   <%= '<p>Select a Topic</p>' if !@topics.empty? %>
   <% @topics.each do |topic| %>
-    <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="<%= topic.id %>">
-    <label for="<%= topic.id %>"><%= topic.name %></label><br>
+    <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="topic_<%= topic.id %>">
+    <label for="topic_<%= topic.id %>"><%= topic.name %></label><br>
   <% end %>
   <br><br>
   <%= '<p>Or Create a New Topic</p><br>' if !@topics.empty? %>
