@@ -1,10 +1,13 @@
 class UserController < ApplicationController
   get '/signup' do
-    erb :'/users/create_user'
+    if !logged_in?
+      erb :'/users/create_user'
+    else
+      redirect to 'lib/show/lib'
+    end
   end
 
   post '/signup' do
-    #binding.pry
     if !params.values.any?("")
       @user = User.create(params)
       session[:user_id] = @user.id
@@ -15,7 +18,11 @@ class UserController < ApplicationController
   end
 
   get '/login' do
-    erb :'/users/login'
+    if !logged_in?
+      erb :'/users/login'
+    else
+      redirect to 'lib/show/lib'
+    end
   end
 
   post '/login' do
@@ -28,4 +35,16 @@ class UserController < ApplicationController
     end
   end
 
+  get '/logout' do
+    if logged_in?
+      erb :'/users/logout'
+    else
+      redirect to '/login'
+    end
+  end
+
+  post '/logout' do
+    session.clear
+    redirect to '/login'
+  end
 end
