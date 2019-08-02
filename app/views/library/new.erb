@@ -28,11 +28,30 @@
   <input type="text" name="topic[name]" id="book_topic"><br>
 
   <h3>FINISH LATER</h3>
+  <h3>Select or Create Location</h3>
   <!--case-->
-  <input type="text" name="case[name]">
-  <input type="text" name="case[description]">
-  <input type="number" name="case[shelf_count]">
+  <%= '<p>Select Your Case</p>' if !@cases.empty? %>
+  <% @cases.each do |bookcase| %>
+    <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
+    <label for="case_<%= bookcase.id %>">
+    <%= bookcase.name %> - Shelf <select name="book[shelf_id]">
+    <% (1..bookcase.shelf_count).each do |shelf_num| %>
+      <option><%= shelf_num %></option>
+    <% end %>
+    </select></label><br>
+  <% end %>
+  <%= '<p>Or Create a New Case</p>' if !@cases.empty? %>
+  <label for="case_name">Case Name: </label>
+  <input type="text" name="case[name]" id="case_name"><br>
+  <label for="case_description">Description: </label>
+  <input type="text" name="case[description]" placeholder="Optional" id="case_description"><br>
+  <label for="case_shelf_count">Shelf Count: </label>
+  <input type="number" name="case[shelf_count]" id="case_shelf_count"><br>
 
+
+
+
+  <h3>FINISH LATER</h3>
   <!--room-->
   <input type="text" name="room[name]">
 
