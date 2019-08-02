@@ -11,39 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190801175100) do
-
-  create_table "books", force: :cascade do |t|
-    t.string   "title"
-    t.string   "author"
-    t.string   "topic"
-    t.integer  "case_id"
-    t.integer  "shelf_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "cases", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.integer  "room_id"
-    t.integer  "shelf_count"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  create_table "rooms", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "username"
-    t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
+ActiveRecord::Schema.define(version: 0) do
 
 end

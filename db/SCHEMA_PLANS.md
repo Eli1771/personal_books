@@ -1,13 +1,24 @@
 Book
   SEARCH PARAMS
   - title
-  - author
-  - topic
   - status (checked in/checked out) <-- probably add later
+  - notes (optional)
+  - author_id
+  - topic_id
   LOCATION
   - case_id
   - shelf_id
-  - room_id (through case) <-- don't need this one
+
+Author
+  - name
+  - book_id
+
+Topic
+  - name
+
+Book_authors
+  - book_id
+  - author_id
 
 Case
   - room_id
