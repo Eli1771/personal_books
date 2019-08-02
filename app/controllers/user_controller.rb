@@ -3,7 +3,7 @@ class UserController < ApplicationController
     if !logged_in?
       erb :'/users/create_user'
     else
-      redirect to 'lib/show/lib'
+      redirect to '/lib'
     end
   end
 
@@ -21,7 +21,7 @@ class UserController < ApplicationController
     if !logged_in?
       erb :'/users/login'
     else
-      redirect to 'lib/show/lib'
+      redirect to '/lib'
     end
   end
 
@@ -29,7 +29,7 @@ class UserController < ApplicationController
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect to '/lib/show/lib'
+      redirect to '/lib'
     else
       redirect to '/login'
     end
