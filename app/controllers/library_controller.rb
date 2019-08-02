@@ -4,16 +4,29 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/new' do
-    @authors = Author.all
-    @topics = Topic.all
-    erb :'/library/new'
+    if logged_in?
+      @authors = Author.all
+      @topics = Topic.all
+      @rooms = Room.all
+      @cases = Case.all
+      erb :'/library/new'
+    else
+      redirect to '/login'
+    end
   end
 
   post '/lib' do
-    binding.pry
+    #binding.pry
     @book = Book.create(params["book"])
-    @author = Author.create(params["Randy Alcorn"]) if !params["author"]["name"].empty?
-
+    if !params["author"]["name"].empty?
+      @author = Author.find_or_create_by(params["author"])
+      @book.authors << @author
+    end
+    if !params["topic"]["name"].empty?
+      @topic = Topic.find_or_create_by(params["topic"])
+      @book.topic = @topic
+      @book.save
+    end
     redirect to '/lib'
   end
 

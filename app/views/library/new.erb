@@ -6,25 +6,28 @@
   <h3>Create A Book</h3>
   <label for="book_title">Title: </label>
   <input type="text" name="book[title]" id="book_title"><br>
+
   <%= '<p>Select Author(s)</p>' if !@authors.empty? %>
   <% @authors.each do |author| %>
-    <input type="checkbox" name="book[authors]" value="<%= author.id %>">
+    <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="<%= author.id %>">
+    <label for="<%= author.id %>"><%= author.name %></label><br>
   <% end %>
-  <p>Or Create a New Author</p><br>
+  <br><br>
+  <%= '<p>Or Create a New Author</p>' if !@authors.empty? %>
   <label for="book_author">Author Name: </label>
   <input type="text" name="author[name]" id="book_authors"><br>
 
-
-  <h3>FINISH LATER</h3>
-
   <%= '<p>Select a Topic</p>' if !@topics.empty? %>
   <% @topics.each do |topic| %>
-    <input type="radio" name="book[topic]" value="<%= topic.id %>">
+    <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="<%= topic.id %>">
+    <label for="<%= topic.id %>"><%= topic.name %></label><br>
   <% end %>
-  <p>Or Create a New Topic</p><br>
+  <br><br>
+  <%= '<p>Or Create a New Topic</p><br>' if !@topics.empty? %>
   <label for="book_topic">Topic: </label>
   <input type="text" name="topic[name]" id="book_topic"><br>
 
+  <h3>FINISH LATER</h3>
   <!--case-->
   <input type="text" name="case[name]">
   <input type="text" name="case[description]">
