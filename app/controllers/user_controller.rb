@@ -7,6 +7,7 @@ class UserController < ApplicationController
     #binding.pry
     if !params.values.any?("")
       @user = User.create(params)
+      session[:user_id] = @user.id
       redirect to '/lib/new'
     else
       redirect to '/signup'
@@ -18,6 +19,13 @@ class UserController < ApplicationController
   end
 
   post '/login' do
+    user = User.find_by(username: params[:username])
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect to '/lib/show/lib'
+    else
+      redirect to '/login'
+    end
   end
 
 end
