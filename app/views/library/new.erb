@@ -27,7 +27,6 @@
   <label for="book_topic">Topic: </label>
   <input type="text" name="topic[name]" id="book_topic"><br>
 
-  <h3>FINISH LATER</h3>
   <h3>Select or Create Location</h3>
   <!--case-->
   <%= '<p>Select Your Case</p>' if !@cases.empty? %>
@@ -50,12 +49,16 @@
   <label for="book_shelf_id">Book's Shelf: </label>
   <input type="number" name="book_shelf_id" placeholder="not more than shelf count" id="book_shelf_id">
 
-
-
-
-  <h3>FINISH LATER</h3>
   <!--room-->
-  <input type="text" name="room[name]">
+  <br><br>
+  <%= '<p>Select Your Room</p>' if !@rooms.empty? %>
+  <% @rooms.each do |room| %>
+    <input type="radio" name="book[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
+    <label for="room_<%= room.id %>"><%= room.name %></label><br>
+  <% end %>
+  <%= '<p>Or Create a New Room</p><br>' if !@rooms.empty? %>
+  <label for="room_name">Room Name: </label>
+  <input type="text" name="room[name]" id="room_name">
 
   <input type="submit" value="Create Book" id="submit">
 

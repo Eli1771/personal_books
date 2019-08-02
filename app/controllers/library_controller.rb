@@ -33,6 +33,11 @@ class LibraryController < ApplicationController
       @book.shelf_id = params["book_shelf_id"]
       @book.save
     end
+    if !params["room"]["name"].empty?
+      @room = Room.find_or_create_by(params["room"])
+      @book.room = @room
+      @book.save
+    end
     redirect to '/lib'
   end
 
