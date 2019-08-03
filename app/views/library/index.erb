@@ -1,7 +1,13 @@
 <h1>Your Library</h1>
 
 <ul><% @books.each do |book| %>
-  <li><%= book.title %></li>
+  <li><%= book.title %> - <%= book.topic %>
+  <ul><% book.authors.each do |author| %>
+    <li><%= author.name %></li>
+  <% end %></ul>
+  <p>Location: </p>
+  <p>Room: <%= book.room_id %> - Case: <%= book.case %> - Shelf: <%= book.shelf_id %></p>
+  </li>
 <% end %></ul>
 
 <br>
