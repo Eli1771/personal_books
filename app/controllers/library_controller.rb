@@ -1,6 +1,6 @@
 class LibraryController < ApplicationController
   get '/lib' do
-    binding.pry
+    #binding.pry
     @books = Book.all.select {|book| book.user.id == session[:user_id]}
     erb :'/library/index'
   end

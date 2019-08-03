@@ -33,7 +33,7 @@
   <% @cases.each do |bookcase| %>
     <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
     <label for="case_<%= bookcase.id %>">
-    <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves)</label><br>
+    <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves) - In <%= bookcase.room.name %></label><br>
   <% end %>
   <%= '<p>Or Create a New Case</p>' if !@cases.empty? %>
   <label for="book_shelf_id">Book's Shelf: </label>
