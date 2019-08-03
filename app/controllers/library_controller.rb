@@ -16,7 +16,7 @@ class LibraryController < ApplicationController
   end
 
   post '/lib' do
-    binding.pry
+    #binding.pry
     @book = Book.create(params[:book])
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
@@ -31,13 +31,11 @@ class LibraryController < ApplicationController
       @case = Case.find_or_create_by(params["case"])
       @book.case = @case
       @book.save
-    else
-      #add room_id to case
     end
     if !params["room"]["name"].empty?
       @room = Room.find_or_create_by(params["room"])
-      @book.room = @room
-      @book.save
+      @case.room = @room
+      @case.save
     end
     redirect to '/lib'
   end
