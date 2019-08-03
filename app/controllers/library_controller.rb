@@ -27,11 +27,12 @@ class LibraryController < ApplicationController
       @book.topic = @topic
       @book.save
     end
-    if !params["case"]["name"].empty?
+    if !params["case"]["name"].empty? #<--Logic to prevent user from entering unavailable shelf
       @case = Case.find_or_create_by(params["case"])
       @book.case = @case
-      @book.shelf_id = params["book_shelf_id"]
       @book.save
+    else
+      #add room_id to case
     end
     if !params["room"]["name"].empty?
       @room = Room.find_or_create_by(params["room"])

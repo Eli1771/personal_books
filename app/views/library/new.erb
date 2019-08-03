@@ -33,24 +33,48 @@
   <% @cases.each do |bookcase| %>
     <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
     <label for="case_<%= bookcase.id %>">
-    <%= bookcase.name %> - Shelf <select name="book[shelf_id]">
-    <% (1..bookcase.shelf_count).each do |shelf_num| %>
-      <option><%= shelf_num %></option>
-    <% end %>
-    </select></label><br>
+    <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves)</label><br>
   <% end %>
+
+
+
+
+
+
   <%= '<p>Or Create a New Case</p>' if !@cases.empty? %>
+
+  <label for="book_shelf_id">Book's Shelf: </label>
+  <input type="number" name="book[shelf_id]" placeholder="Shelf that book is on" id="book_shelf_id"><br>
+
   <label for="case_name">Case Name: </label>
   <input type="text" name="case[name]" id="case_name"><br>
+
   <label for="case_description">Description: </label>
   <input type="text" name="case[description]" placeholder="Optional" id="case_description"><br>
+
   <label for="case_shelf_count">Shelf Count: </label>
   <input type="number" name="case[shelf_count]" id="case_shelf_count"><br>
-  <label for="book_shelf_id">Book's Shelf: </label>
-  <input type="number" name="book_shelf_id" placeholder="not more than shelf count" id="book_shelf_id">
+
+  <!--select room-->
+  <%= '<p>Select the room that your case is located in</p>' if !@rooms.empty? %>
+  <% @rooms.each do |room| %>
+    <input type="radio" name="case[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
+    <label for="room_<%= room.id %>"><%= room.name %></label>
+  <% end %>
+  <%= '<p>Or create new room</p>' if !@rooms.empty? %>
+  <label for="room_name">Room Name: </label>
+  <input type="text" name="room[name]" id="room_name">
+
+
+
+
+
+
+
+
 
   <!--room-->
-  <br><br>
+  <!--<br><br>
   <%= '<p>Select Your Room</p>' if !@rooms.empty? %>
   <% @rooms.each do |room| %>
     <input type="radio" name="book[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
@@ -58,7 +82,7 @@
   <% end %>
   <%= '<p>Or Create a New Room</p><br>' if !@rooms.empty? %>
   <label for="room_name">Room Name: </label>
-  <input type="text" name="room[name]" id="room_name">
+  <input type="text" name="room[name]" id="room_name">-->
 
   <input type="submit" value="Create Book" id="submit">
 
