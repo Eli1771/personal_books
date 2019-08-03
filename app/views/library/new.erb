@@ -53,7 +53,10 @@
   <% end %>
   <%= '<p>Or create new room</p>' if !@rooms.empty? %>
   <label for="room_name">Room Name: </label>
-  <input type="text" name="room[name]" id="room_name"><br>
+  <input type="text" name="room[name]" id="room_name"><br><br>
+
+  <label for="book_notes">Any additional notes?</label>
+  <input type="text" name="book[notes]" id="book_notes">
 
   <input type="submit" value="Create Book" id="submit">
 
