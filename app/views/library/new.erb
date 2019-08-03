@@ -35,23 +35,13 @@
     <label for="case_<%= bookcase.id %>">
     <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves)</label><br>
   <% end %>
-
-
-
-
-
-
   <%= '<p>Or Create a New Case</p>' if !@cases.empty? %>
-
   <label for="book_shelf_id">Book's Shelf: </label>
   <input type="number" name="book[shelf_id]" placeholder="Shelf that book is on" id="book_shelf_id"><br>
-
   <label for="case_name">Case Name: </label>
   <input type="text" name="case[name]" id="case_name"><br>
-
   <label for="case_description">Description: </label>
   <input type="text" name="case[description]" placeholder="Optional" id="case_description"><br>
-
   <label for="case_shelf_count">Shelf Count: </label>
   <input type="number" name="case[shelf_count]" id="case_shelf_count"><br>
 
