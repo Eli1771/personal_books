@@ -53,26 +53,7 @@
   <% end %>
   <%= '<p>Or create new room</p>' if !@rooms.empty? %>
   <label for="room_name">Room Name: </label>
-  <input type="text" name="room[name]" id="room_name">
-
-
-
-
-
-
-
-
-
-  <!--room-->
-  <!--<br><br>
-  <%= '<p>Select Your Room</p>' if !@rooms.empty? %>
-  <% @rooms.each do |room| %>
-    <input type="radio" name="book[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
-    <label for="room_<%= room.id %>"><%= room.name %></label><br>
-  <% end %>
-  <%= '<p>Or Create a New Room</p><br>' if !@rooms.empty? %>
-  <label for="room_name">Room Name: </label>
-  <input type="text" name="room[name]" id="room_name">-->
+  <input type="text" name="room[name]" id="room_name"><br>
 
   <input type="submit" value="Create Book" id="submit">
 

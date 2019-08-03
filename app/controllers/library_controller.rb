@@ -1,5 +1,7 @@
 class LibraryController < ApplicationController
   get '/lib' do
+    binding.pry
+    @books = Book.all.select {|book| book.user.id == session[:user_id]}
     erb :'/library/index'
   end
 
@@ -37,6 +39,8 @@ class LibraryController < ApplicationController
       @case.room = @room
       @case.save
     end
+    @book.user = User.find_by_id(session[:user_id])
+    @book.save
     redirect to '/lib'
   end
 
