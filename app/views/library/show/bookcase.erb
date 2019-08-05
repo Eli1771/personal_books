@@ -1,0 +1,19 @@
+<h1>Case: <%= @case.name %> - In <%= @case.room.name %></h1>
+
+<div id="case">
+  <% i = 1 %>
+  <% while i <= @case.shelf_count %>
+    <div class="shelf">
+      <h3><%= i %></h3>
+      <% one_shelf = @books.select {|book| book.shelf_id == i} %>
+      <% one_shelf.each do |book| %>
+        <% authors = book.authors.map {|author| author.name}.join(", ") %>
+        <p><%= book.title %> - <%= authors %> - <%= book.topic.name %></p>
+      <% end %>
+    </div>
+    <% i += 1 %>
+  <% end %>
+</div>
+
+
+<a href="/logout">Log Out</a>

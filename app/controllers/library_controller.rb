@@ -53,7 +53,8 @@ class LibraryController < ApplicationController
 
   get '/lib/case/:id' do
     @case = Case.find_by_id(params[:id])
-    erb :'/library/show/case'
+    @books = @case.books
+    erb :'/library/show/bookcase'
   end
 
   get '/lib/book/:id' do
