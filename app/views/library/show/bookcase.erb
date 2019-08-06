@@ -1,3 +1,24 @@
+<style>
+
+  #case {
+    width: 50%;
+    margin: auto;
+    background: pink;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+  }
+
+  .shelf {
+    margin: 10px;
+    padding: 10px;
+    border-top: 1px solid black;
+  }
+
+  .shelf:first-child {
+    border-top: none;
+  }
+</style>
+
 <h1>Case: <%= @case.name %> - In <%= @case.room.name %></h1>
 
 <div id="case">

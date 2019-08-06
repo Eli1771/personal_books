@@ -1,9 +1,32 @@
+<style>
+
+  #room {
+    background: #a7d0a7;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+  }
+
+  .flex-container {
+    display: flex;
+  }
+
+  .case {
+    display: inline-block;
+    width: 40%;
+    margin: 4%;
+    padding: 1vw;
+    background: pink;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+  }
+</style>
+
 <h1>Room: <%= @room.name %> - <%= @cases.count %> Cases</h1>
 
 <div id="room" class="flex-container">
   <% @cases.each do |bookcase| %>
   <div class="case">
-    <h3><%= bookcase.name %></h3>
+    <h3>Case <%= bookcase.name %></h3>
     <p><%= bookcase.shelf_count %> shelves</p>
     <p><%= bookcase.books.count %> books total</p>
     <% topics = bookcase.books.map {|book| book.topic.name}.uniq.join(", ") %>
