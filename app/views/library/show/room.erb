@@ -1,4 +1,15 @@
-<h1>Room [name]</h1>
+<h1>Room: <%= @room.name %> - <%= @cases.count %> Cases</h1>
 
+<div id="room" class="flex-container">
+  <% @cases.each do |bookcase| %>
+  <div class="case">
+    <h3><%= bookcase.name %></h3>
+    <p><%= bookcase.shelf_count %> shelves</p>
+    <p><%= bookcase.books.count %> books total</p>
+    <% topics = bookcase.books.map {|book| book.topic.name}.uniq.join(", ") %>
+    <p>Topics: <%= topics %></p>
+  </div>
+  <% end %>
+</div>
 
 <a href="/logout">Log Out</a>

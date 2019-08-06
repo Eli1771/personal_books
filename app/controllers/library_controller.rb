@@ -47,7 +47,9 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/room/:id' do
+    #slug room names?
     @room = Room.find_by_id(params[:id])
+    @cases = @room.cases
     erb :'/library/show/room'
   end
 
