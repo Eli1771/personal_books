@@ -1,10 +1,32 @@
 <style>
 
+  #library, #room, #case, .book {
+    margin: 5px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  #library {
+    background: #ffffae;
+  }
+
+  #room {
+    background: #a7d0a7;
+  }
+
   #case {
-    width: 50%;
+    width: 60%;
     margin: auto;
     background: pink;
     border-radius: 15px;
+  }
+
+  .book {
+    background: #ffbb3e;
+  }
+
+  h1 {
+    padding: 10px
   }
 
   .shelf {
@@ -16,24 +38,33 @@
   .shelf:first-child {
     border-top: none;
   }
+
+  ul {
+    list-style-type: circle;
+  }
+
 </style>
 
-<h1>Case: <%= @case.name %> - In <%= @case.room.name %></h1>
-
-<div id="case">
-  <% i = 1 %>
-  <% while i <= @case.shelf_count %>
-    <div class="shelf">
-      <h3><%= i %></h3>
-      <% one_shelf = @books.select {|book| book.shelf_id == i} %>
-      <% one_shelf.each do |book| %>
-        <% authors = book.authors.map {|author| author.name}.join(", ") %>
-        <p><%= book.title %> - <%= authors %> - <%= book.topic.name %></p>
+<div id="library">
+  <h4>The <%= @user.username %> Library</h4>
+  <div id="room">
+    <h4>Room: <%= @case.room.name %></h4>
+    <div id="case">
+      <h1>Case: <%= @case.name %> - <%= @case.shelf_count %> Shelves</h1>
+      <% i = 1 %>
+      <% while i <= @case.shelf_count %>
+        <div class="shelf">
+          <% one_shelf = @books.select {|book| book.shelf_id == i} %>
+          <h3><%= i %> - <%= one_shelf.count %> <%= one_shelf.count == 1 ? 'Book' : 'Books' %></h3>
+          <% one_shelf.each do |book| %>
+            <% authors = book.authors.map {|author| author.name}.join(", ") %>
+            <div class="book"><%= book.title %> - <%= authors %> - <%= book.topic.name %></div>
+          <% end %>
+        </div>
+        <% i += 1 %>
       <% end %>
     </div>
-    <% i += 1 %>
-  <% end %>
+  </div>
 </div>
-
 
 <a href="/logout">Log Out</a>

@@ -1,8 +1,22 @@
 <style>
 
+  #library, #room, .case {
+    margin: 5px;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  #library {
+    background: #ffffae;
+  }
+
   #room {
     background: #a7d0a7;
     border-radius: 15px;
+  }
+
+  h1 {
+    padding: 10px
   }
 
   .flex-container {
@@ -12,25 +26,28 @@
   .case {
     display: inline-block;
     width: 40%;
-    margin: 4%;
     padding: 1vw;
     background: pink;
     border-radius: 15px;
   }
 </style>
 
-<h1>Room: <%= @room.name %> - <%= @cases.count %> Cases</h1>
-
-<div id="room" class="flex-container">
-  <% @cases.each do |bookcase| %>
-  <div class="case">
-    <h3>Case <%= bookcase.name %></h3>
-    <p><%= bookcase.shelf_count %> shelves</p>
-    <p><%= bookcase.books.count %> books total</p>
-    <% topics = bookcase.books.map {|book| book.topic.name}.uniq.join(", ") %>
-    <p>Topics: <%= topics %></p>
+<div id="library">
+  <h4>The <%= @user.username %> Library</h4>
+  <div id="room">
+    <h1>Room: <%= @room.name %> - <%= @cases.count %> Cases</h1>
+    <div class="flex-container">
+      <% @cases.each do |bookcase| %>
+      <div class="case">
+        <h3>Case <%= bookcase.name %></h3>
+        <p><%= bookcase.shelf_count %> shelves</p>
+        <p><%= bookcase.books.count %> books total</p>
+        <% topics = bookcase.books.map {|book| book.topic.name}.uniq.join(", ") %>
+        <p>Topics: <%= topics %></p>
+      </div>
+      <% end %>
+    </div>
   </div>
-  <% end %>
 </div>
 
 <a href="/logout">Log Out</a>
