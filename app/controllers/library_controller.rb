@@ -46,6 +46,12 @@ class LibraryController < ApplicationController
     redirect to '/lib'
   end
 
+  get '/lib/show' do
+    @user = User.find_by_id(session[:user_id])
+    @rooms = @user.rooms
+    erb :'/library/show'
+  end
+
   get '/lib/room/:id' do
     #slug room names?
     @room = Room.find_by_id(params[:id])

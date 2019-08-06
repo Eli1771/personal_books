@@ -1,1 +1,6 @@
-<h1>Book [name]</h1>
+<h1><%= @book.title %> - <%= @book.topic.name %></h1>
+  <ul><% @book.authors.each do |author| %>
+    <li><h3><%= author.name %></h3></li>
+  <% end %></ul>
+<h3>Location: </h3>
+<p>Room: <%= @book.case.room.name %> - Case: <%= @book.case.name %> - Shelf: <%= @book.shelf_id %></p>
