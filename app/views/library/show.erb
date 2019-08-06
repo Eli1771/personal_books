@@ -1,7 +1,39 @@
-<h1>The <%= @user.username %> Library</h1>
+<style>
 
-<% @rooms.each do |room| %>
-  <div id="room" class="flex-container">
+  #library, .room {
+    margin: 5px;
+    padding: 15px;
+    border-radius: 15px;
+  }
 
+  #library {
+    background: #ffffae;
+  }
+
+  .room {
+    background: #a7d0a7;
+
+  }
+
+  h1 {
+    padding: 10px
+  }
+
+  .flex-container {
+    display: flex;
+  }
+
+</style>
+
+
+<div id="library">
+  <h1>The <%= @user.username %> Library</h1>
+  <div class="flex-container">
+    <% @rooms.each do |room| %>
+      <div class="room">
+        <h3><%= room.name %></h3>
+        <p><%= room.cases.count %> Cases</p>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

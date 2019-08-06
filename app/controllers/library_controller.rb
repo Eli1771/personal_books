@@ -37,6 +37,7 @@ class LibraryController < ApplicationController
     if !params["room"]["name"].empty?
       @room = Room.find_or_create_by(params["room"])
       @case.room = @room
+      @user.rooms << @room
       @case.save
     end
     @book.room_id = @book.case.room.id
@@ -68,6 +69,7 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/book/:id' do
+    @user = User.find_by_id(session[:user_id])
     @book = Book.find_by_id(params[:id])
     erb :'/library/show/book'
   end

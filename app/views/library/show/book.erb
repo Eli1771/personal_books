@@ -1,6 +1,56 @@
-  <h1><%= @book.title %> - <%= @book.topic.name %></h1>
-    <ul><% @book.authors.each do |author| %>
-      <li><h3><%= author.name %></h3></li>
-    <% end %></ul>
-  <h3>Location: </h3>
-  <p>Room: <%= @book.case.room.name %> - Case: <%= @book.case.name %> - Shelf: <%= @book.shelf_id %></p>
+<style>
+
+
+    #library, #room, #case, #book {
+      margin: 5px;
+      padding: 15px;
+      border-radius: 15px;
+    }
+
+    #library {
+      background: #ffffae;
+    }
+
+    #room {
+      background: #a7d0a7;
+    }
+
+    #case {
+      margin: auto;
+      background: pink;
+      border-radius: 15px;
+    }
+
+    #book {
+      width: 60%;
+      margin: auto;
+      background: #ffbb3e;
+    }
+
+    h1 {
+      padding: 10px
+    }
+
+    ul {
+      list-style-type: circle;
+    }
+
+</style>
+
+<div id="library">
+  <h4>The <%= @user.username %> Library</h4>
+  <div id="room">
+    <h4>Room: <%= @book.case.room.name %></h4>
+    <div id="case">
+      <h4>Case: <%= @book.case.name %></h4>
+      <div id="book">
+        <h1><%= @book.title %></h1>
+        <ul><% @book.authors.each do |author| %>
+          <li><h3><%= author.name %></h3></li>
+        <% end %></ul>
+        <p>Topic: <%= @book.topic.name %></p>
+        <p>Notes: <%= @book.notes == '' ? 'none' : @book.notes %></p>
+      </div>
+    </div>
+  </div>
+</div>
