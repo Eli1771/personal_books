@@ -74,4 +74,13 @@ class LibraryController < ApplicationController
     erb :'/library/show/book'
   end
 
+  get '/lib/book/:id/edit' do
+    @book = Book.find_by_id(params[:id])
+    @authors = Author.all
+    @topics = Topic.all
+    @rooms = Room.all
+    @cases = Case.all
+    erb :'/library/edit'
+  end
+
 end

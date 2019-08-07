@@ -1,4 +1,73 @@
-<h1>Edit</h1>
+<h1>Edit Book</h1>
 
+<form action="/lib" method="post">
+
+  <!--book-->
+  <div class="flex-container">
+    <div>
+      <h3>Create A Book</h3>
+      <label for="book_title">Title: </label>
+      <input type="text" name="book[title]" id="book_title"><br><br>
+
+      <%= '<h4>Select Author(s)</h4>' if !@authors.empty? %>
+      <% @authors.each do |author| %>
+        <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="author_<%= author.id %>">
+        <label for="author_<%= author.id %>"><%= author.name %></label><br>
+      <% end %>
+      <br><br>
+      <%= '<h4>Or Create a New Author</h4>' if !@authors.empty? %>
+      <label for="book_author">Author Name: </label>
+      <input type="text" name="author[name]" id="book_authors"><br><br>
+
+      <%= '<h4>Select a Topic</h4>' if !@topics.empty? %>
+      <% @topics.each do |topic| %>
+        <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="topic_<%= topic.id %>">
+        <label for="topic_<%= topic.id %>"><%= topic.name %></label><br>
+      <% end %>
+      <br><br>
+      <%= '<h4>Or Create a New Topic</h4><br>' if !@topics.empty? %>
+      <label for="book_topic">Topic: </label>
+      <input type="text" name="topic[name]" id="book_topic"><br>
+    </div>
+
+    <div>
+      <h3><%= 'Select or' if !Case.all.empty? %> Create Location</h3>
+      <!--case-->
+      <%= '<h4>Select Your Case</h4>' if !@cases.empty? %>
+      <% @cases.each do |bookcase| %>
+        <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
+        <label for="case_<%= bookcase.id %>">
+        <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves) - In <%= bookcase.room.name %></label><br>
+      <% end %><br>
+      <%= '<h4>Or Create a New Case</h4>' if !@cases.empty? %>
+
+      <label for="case_name">Case Name: </label>
+      <input type="text" name="case[name]" id="case_name"><br>
+      <label for="case_description">Description: </label>
+      <input type="text" name="case[description]" placeholder="Optional" id="case_description"><br>
+      <label for="case_shelf_count">Shelf Count: </label>
+      <input type="number" name="case[shelf_count]" id="case_shelf_count"><br>
+
+      <!--select room-->
+      <%= '<h4>Select the room that your case is located in</h4>' if !@rooms.empty? %>
+      <% @rooms.each do |room| %>
+        <input type="radio" name="case[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
+        <label for="room_<%= room.id %>"><%= room.name %></label>
+      <% end %>
+      <%= '<h4>Or create new room</h4>' if !@rooms.empty? %>
+      <label for="room_name">Room Name: </label>
+      <input type="text" name="room[name]" id="room_name"><br><br>
+
+      <label for="book_shelf_id">Which shelf is your book on? </label>
+      <input type="number" name="book[shelf_id]" placeholder="Shelf that book is on" id="book_shelf_id"><br>
+
+      <label for="book_notes">Any additional notes? </label>
+      <input type="text" name="book[notes]" id="book_notes">
+    </div>
+  </div>
+
+  <input type="submit" value="Edit Book" id="submit">
+
+</form>
 
 <a href="/logout">Log Out</a>
