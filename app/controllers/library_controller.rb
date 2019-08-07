@@ -18,7 +18,7 @@ class LibraryController < ApplicationController
   end
 
   post '/lib' do
-    #binding.pry
+    binding.pry
     @book = Book.create(params[:book])
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
@@ -40,7 +40,6 @@ class LibraryController < ApplicationController
       @case.save
     end
     @book.room_id = @book.case.room.id
-    @book.save
     @book.user = User.find_by_id(session[:user_id])
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
@@ -87,6 +86,33 @@ class LibraryController < ApplicationController
     binding.pry
     @user = User.find_by_id(session[:user_id])
     @book = Book.find_by_id(params[:id])
+    @book.update(params[:book])
+
+    if !params["author"]["name"].empty?
+      @author = Author.find_or_create_by(params["author"])
+      @book.authors << @author
+    end
+    if !params["topic"]["name"].empty?
+      @topic = Topic.find_or_create_by(params["topic"])
+      @book.topic = @topic
+      @book.save
+    end
+    if !params["case"]["name"].empty? #<--Logic to prevent user from entering unavailable shelf
+      @case = Case.find_or_create_by(params["case"])
+      @book.case = @case
+      @book.save
+    end
+    if !params["room"]["name"].empty?
+      @room = Room.find_or_create_by(params["room"])
+      @case.room = @room
+      @case.save
+    end
+    @book.room_id = @book.case.room.id
+    @book.user = User.find_by_id(session[:user_id])
+    @book.user.rooms << Room.find_by_id(@book.room_id)
+    @book.save
+
+
     erb :'/library/show/book'
   end
 

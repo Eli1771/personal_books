@@ -30,7 +30,7 @@
 
       <%= '<h4>Select Author(s)</h4>' if !@authors.empty? %>
       <% @authors.each do |author| %>
-        <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="author_<%= author.id %>" <%= 'checked' if @book.author_ids.include?(author.id) %>>
+        <input type="checkbox" name="book[author_ids][]" value="<%= author.id %>" id="author_<%= author.id %>" <%= 'checked' if @book.author_ids.include?(author.id) %>>
         <label for="author_<%= author.id %>"><%= author.name %></label><br>
       <% end %>
       <br><br>
