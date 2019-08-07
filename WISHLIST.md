@@ -13,3 +13,5 @@ Make certain fields required (ie shelf count for new bookcases)
 Sort everything by name in the views and entry forms
 
 Bug fix for titles with double quotes
+
+Shelf_id cannot be higher than shelf count

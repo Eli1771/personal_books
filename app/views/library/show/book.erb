@@ -63,3 +63,8 @@
     </div>
   </div>
 </div>
+
+<form action="/lib/book/<%= @book.id %>" method="post">
+  <input type="hidden" id="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Delete" id="delete">
+</form>

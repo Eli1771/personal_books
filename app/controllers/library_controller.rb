@@ -18,7 +18,7 @@ class LibraryController < ApplicationController
   end
 
   post '/lib' do
-    binding.pry
+    #binding.pry
     @book = Book.create(params[:book])
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
@@ -83,7 +83,7 @@ class LibraryController < ApplicationController
   end
 
   patch '/lib/book/:id' do
-    binding.pry
+    #binding.pry
     @user = User.find_by_id(session[:user_id])
     @book = Book.find_by_id(params[:id])
     @book.update(params[:book])
@@ -111,10 +111,12 @@ class LibraryController < ApplicationController
     @book.user = User.find_by_id(session[:user_id])
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
-
-
-    erb :'/library/show/book'
+    redirect to "/lib/book/#{@book.id}"
   end
 
-
+  delete '/lib/book/:id' do
+    @book = Book.find_by_id(params[:id])
+    @book.delete
+    redirect to '/lib'
+  end
 end
