@@ -52,7 +52,7 @@
     <div id="case">
       <a href="/lib/case/<%= @book.case.id %>"><h4>Case: <%= @book.case.name %></h4></a>
       <div id="book">
-        <h4 id="subheader">Book</h4>
+        <h4 id="subheader">Book - On Shelf <%= @book.shelf_id %></h4>
         <h1><%= @book.title %></h1>
         <ul>By <% @book.authors.each do |author| %>
           <li><h3><%= author.name %></h3></li>

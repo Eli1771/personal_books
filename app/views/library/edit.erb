@@ -54,7 +54,7 @@
       <!--case-->
       <%= '<h4>Select Your Case</h4>' if !@cases.empty? %>
       <% @cases.each do |bookcase| %>
-        <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
+        <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>" <%= 'checked' if @book.case.id == bookcase.id %>>
         <label for="case_<%= bookcase.id %>">
         <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves) - In <%= bookcase.room.name %></label><br>
       <% end %><br>
@@ -78,10 +78,10 @@
       <input type="text" name="room[name]" id="room_name"><br><br>
 
       <label for="book_shelf_id">Which shelf is your book on? </label>
-      <input type="number" name="book[shelf_id]" placeholder="Shelf that book is on" id="book_shelf_id"><br>
+      <input type="number" name="book[shelf_id]" placeholder="Shelf that book is on" id="book_shelf_id" value="<%= @book.shelf_id %>"><br>
 
       <label for="book_notes">Any additional notes? </label>
-      <input type="text" name="book[notes]" id="book_notes">
+      <input type="text" name="book[notes]" id="book_notes" value="<%= @book.notes %>">
     </div>
   </div>
 
