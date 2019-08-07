@@ -1,17 +1,36 @@
+<style>
+  .flex-container {
+    display: flex;
+  }
+
+  .flex-container div {
+    display: inline-block;
+    width: 45%;
+    margin: 0;
+    padding: 2vw;
+  }
+
+  .flex-container div:last-child {
+    border-left: 2px solid #ccc;
+  }
+</style>
+
+
 <h1>Edit Book</h1>
 
-<form action="/lib" method="post">
+<form action="/lib/edit" method="post">
+  <input type="hidden" id="hidden" name="_method" value="PATCH">
 
   <!--book-->
   <div class="flex-container">
     <div>
       <h3>Create A Book</h3>
       <label for="book_title">Title: </label>
-      <input type="text" name="book[title]" id="book_title"><br><br>
+      <input type="text" name="book[title]" id="book_title" value="<%= @book.title %>"><br><br>
 
       <%= '<h4>Select Author(s)</h4>' if !@authors.empty? %>
       <% @authors.each do |author| %>
-        <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="author_<%= author.id %>">
+        <input type="checkbox" name="book[author_ids]" value="<%= author.id %>" id="author_<%= author.id %>" <%= 'checked' if @book.author_ids.include?(author.id) %>>
         <label for="author_<%= author.id %>"><%= author.name %></label><br>
       <% end %>
       <br><br>
@@ -21,7 +40,7 @@
 
       <%= '<h4>Select a Topic</h4>' if !@topics.empty? %>
       <% @topics.each do |topic| %>
-        <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="topic_<%= topic.id %>">
+        <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="topic_<%= topic.id %>" <%= 'checked' if @book.topic.name == topic.name %>>
         <label for="topic_<%= topic.id %>"><%= topic.name %></label><br>
       <% end %>
       <br><br>

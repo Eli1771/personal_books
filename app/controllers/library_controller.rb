@@ -83,4 +83,9 @@ class LibraryController < ApplicationController
     erb :'/library/edit'
   end
 
+  patch '/lib/:id' do
+    @book = Book.find_by_id(params[:id])
+    erb :'/library/show/book'
+  end
+
 end

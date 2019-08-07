@@ -11,3 +11,5 @@ Add flash messages
 Make certain fields required (ie shelf count for new bookcases)
 
 Sort everything by name in the views and entry forms
+
+Bug fix for titles with double quotes
