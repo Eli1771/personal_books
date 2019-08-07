@@ -33,11 +33,11 @@ class LibraryController < ApplicationController
       @case = Case.find_or_create_by(params["case"])
       @book.case = @case
       @book.save
-    end
-    if !params["room"]["name"].empty?
-      @room = Room.find_or_create_by(params["room"])
-      @case.room = @room
-      @case.save
+      if !params["room"]["name"].empty?
+        @room = Room.find_or_create_by(params["room"])
+        @case.room = @room
+        @case.save
+      end
     end
     @book.room_id = @book.case.room.id
     @book.user = User.find_by_id(session[:user_id])
@@ -101,11 +101,11 @@ class LibraryController < ApplicationController
       @case = Case.find_or_create_by(params["case"])
       @book.case = @case
       @book.save
-    end
-    if !params["room"]["name"].empty?
-      @room = Room.find_or_create_by(params["room"])
-      @case.room = @room
-      @case.save
+      if !params["room"]["name"].empty?
+        @room = Room.find_or_create_by(params["room"])
+        @case.room = @room
+        @case.save
+      end
     end
     @book.room_id = @book.case.room.id
     @book.user = User.find_by_id(session[:user_id])
