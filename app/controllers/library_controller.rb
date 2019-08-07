@@ -83,9 +83,12 @@ class LibraryController < ApplicationController
     erb :'/library/edit'
   end
 
-  patch '/lib/:id' do
+  patch '/lib/book/:id' do
+    binding.pry
+    @user = User.find_by_id(session[:user_id])
     @book = Book.find_by_id(params[:id])
     erb :'/library/show/book'
   end
+
 
 end

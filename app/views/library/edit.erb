@@ -18,7 +18,7 @@
 
 <h1>Edit Book</h1>
 
-<form action="/lib/edit" method="post">
+<form action="/lib/book/<%= @book.id %>" method="post">
   <input type="hidden" id="hidden" name="_method" value="PATCH">
 
   <!--book-->
