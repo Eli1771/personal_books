@@ -12,11 +12,14 @@
 
   .room {
     background: #a7d0a7;
-
   }
 
   h1 {
     padding: 10px
+  }
+
+  #subheader {
+    padding-left: 10px;
   }
 
   .flex-container {
@@ -28,6 +31,7 @@
 
 <div id="library">
   <h1>The <%= @user.username %> Library</h1>
+  <h4 id="subheader"><%= @user.rooms.count %> Room<%= 's' if @user.rooms.count != 1 %></h4>
   <div class="flex-container">
     <% @rooms.each do |room| %>
       <div class="room">

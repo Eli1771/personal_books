@@ -48,7 +48,7 @@
     </div>
 
     <div>
-      <h3>Select or Create Location</h3>
+      <h3><%= 'Select or' if !Case.all.empty? %> Create Location</h3>
       <!--case-->
       <%= '<h4>Select Your Case</h4>' if !@cases.empty? %>
       <% @cases.each do |bookcase| %>

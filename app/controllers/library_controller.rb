@@ -37,12 +37,12 @@ class LibraryController < ApplicationController
     if !params["room"]["name"].empty?
       @room = Room.find_or_create_by(params["room"])
       @case.room = @room
-      @user.rooms << @room
       @case.save
     end
     @book.room_id = @book.case.room.id
     @book.save
     @book.user = User.find_by_id(session[:user_id])
+    @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
     redirect to '/lib'
   end
