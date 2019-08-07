@@ -30,21 +30,31 @@
       padding: 10px
     }
 
+    #subheader {
+      padding-left: 10px;
+    }
+
     ul {
       list-style-type: circle;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
     }
 
 </style>
 
 <div id="library">
-  <h4>The <%= @user.username %> Library</h4>
+  <a href="/lib/show"><h4>The <%= @user.username %> Library</h4></a>
   <div id="room">
-    <h4>Room: <%= @book.case.room.name %></h4>
+    <a href="/lib/room/<%= @book.case.room.id %>"><h4>Room: <%= @book.case.room.name %></h4></a>
     <div id="case">
-      <h4>Case: <%= @book.case.name %></h4>
+      <a href="/lib/case/<%= @book.case.id %>"><h4>Case: <%= @book.case.name %></h4></a>
       <div id="book">
+        <h4 id="subheader">Book</h4>
         <h1><%= @book.title %></h1>
-        <ul><% @book.authors.each do |author| %>
+        <ul>By <% @book.authors.each do |author| %>
           <li><h3><%= author.name %></h3></li>
         <% end %></ul>
         <p>Topic: <%= @book.topic.name %></p>

@@ -31,22 +31,28 @@
     width: 40%;
     background: pink;
   }
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
 </style>
 
 <div id="library">
-  <h4>The <%= @user.username %> Library</h4>
+  <a href="/lib/show"><h4>The <%= @user.username %> Library</h4></a>
   <div id="room">
     <h1>Room: <%= @room.name %></h1>
     <h4 id="subheader"><%= @cases.count %> Case<%= 's' if @cases.count != 1 %></h4>
     <div class="flex-container">
       <% @cases.each do |bookcase| %>
-      <div class="case">
+      <div class="case"><a href="/lib/case/<%= bookcase.id %>">
         <h3>Case <%= bookcase.name %></h3>
         <p><%= bookcase.shelf_count %> shelves</p>
         <p><%= bookcase.books.count %> books total</p>
         <% topics = bookcase.books.map {|book| book.topic.name}.uniq.join(", ") %>
         <p>Topics: <%= topics %></p>
-      </div>
+      </a></div>
       <% end %>
     </div>
   </div>

@@ -47,12 +47,17 @@
     list-style-type: circle;
   }
 
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
 </style>
 
 <div id="library">
-  <h4>The <%= @user.username %> Library</h4>
+  <a href="/lib/show"><h4>The <%= @user.username %> Library</h4></a>
   <div id="room">
-    <h4>Room: <%= @case.room.name %></h4>
+    <a href="/lib/room/<%= @case.room.id %>"><h4>Room: <%= @case.room.name %></h4></a>
     <div id="case">
       <h1>Case: <%= @case.name %></h1>
       <h4 id="subheader"><%= @case.shelf_count %> Shel<%= @case.shelf_count == 1 ? 'f' : 'ves' %></h4>
@@ -63,7 +68,9 @@
           <h3><%= one_shelf.count %> Book<%= 's' if one_shelf.count != 1 %></h3>
           <% one_shelf.each do |book| %>
             <% authors = book.authors.map {|author| author.name}.join(", ") %>
-            <div class="book"><%= book.title %> - <%= authors %> - <%= book.topic.name %></div>
+            <div class="book"><a href="/lib/book/<%= book.id %>">
+              <%= book.title %> - <%= authors %> - <%= book.topic.name %>
+            </a></div>
           <% end %>
         </div>
         <% i += 1 %>

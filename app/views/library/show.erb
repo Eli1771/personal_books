@@ -26,6 +26,11 @@
     display: flex;
   }
 
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
 </style>
 
 
@@ -34,10 +39,10 @@
   <h4 id="subheader"><%= @user.rooms.count %> Room<%= 's' if @user.rooms.count != 1 %></h4>
   <div class="flex-container">
     <% @rooms.each do |room| %>
-      <div class="room">
+      <a href="/lib/room/<%= room.id %>"><div class="room">
         <h3><%= room.name %></h3>
         <p><%= room.cases.count %> Cases</p>
-      </div>
+      </div></a>
     <% end %>
   </div>
 </div>
