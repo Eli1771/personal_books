@@ -1,4 +1,5 @@
 <style>
+
   .flex-container {
     display: flex;
   }
@@ -13,6 +14,19 @@
   .flex-container div:last-child {
     border-left: 2px solid #ccc;
   }
+
+  a.nav_link:link {
+    color: #999;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  a.nav_link:visited {
+    color: #999;
+  }
+  a.nav_link:hover {
+    color:black;
+  }
+
 </style>
 
 
@@ -89,4 +103,9 @@
 
 </form>
 
-<a href="/logout">Log Out</a>
+<br><br>
+<a href="/lib/new" class="nav_link">ADD MORE BOOKS</a>
+<br><br>
+<a href="/lib/show" class="nav_link">VIEW LIBRARY</a>
+<br><br>
+<a href="/logout" class="nav_link">LOG OUT</a>
