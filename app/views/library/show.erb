@@ -50,7 +50,7 @@
   <h1>The <%= @user.username %> Library</h1>
   <h4 id="subheader"><%= @user.rooms.count %> Room<%= 's' if @user.rooms.count != 1 %></h4>
   <div class="flex-container">
-    <% @rooms.each do |room| %>
+    <% @rooms.sort_by {|room| room.name}.each do |room| %>
       <a href="/lib/room/<%= room.id %>"><div class="room">
         <h3><%= room.name %></h3>
         <p><%= room.cases.count %> Cases</p>

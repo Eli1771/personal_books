@@ -76,7 +76,7 @@
       <% i = 1 %>
       <% while i <= @case.shelf_count %>
         <div class="shelf">
-          <% one_shelf = @books.select {|book| book.shelf_id == i} %>
+          <% one_shelf = @books.select {|book| book.shelf_id == i}.sort_by {|book| book.title} %>
           <h3><%= one_shelf.count %> Book<%= 's' if one_shelf.count != 1 %></h3>
           <% one_shelf.each do |book| %>
             <% authors = book.authors.map {|author| author.name}.join(", ") %>
@@ -92,6 +92,6 @@
 </div>
 
 <br><br>
-<a href="/lib/new">ADD NEW BOOKS</a>
+<a href="/lib/new" class="nav_link">ADD NEW BOOKS</a>
 <br><br>
-<a href="/logout">LOG OUT</a>
+<a href="/logout" class="nav_link">LOG OUT</a>

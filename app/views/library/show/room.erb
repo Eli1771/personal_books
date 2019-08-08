@@ -57,7 +57,7 @@
     <h1>Room: <%= @room.name %></h1>
     <h4 id="subheader"><%= @cases.count %> Case<%= 's' if @cases.count != 1 %></h4>
     <div class="flex-container">
-      <% @cases.each do |bookcase| %>
+      <% @cases.sort_by {|bookcase| bookcase.name.to_s}.each do |bookcase| %>
       <div class="case"><a href="/lib/case/<%= bookcase.id %>">
         <h3>Case <%= bookcase.name %></h3>
         <p><%= bookcase.shelf_count %> shelves</p>
@@ -71,6 +71,6 @@
 </div>
 
 <br><br>
-<a href="/lib/new">ADD NEW BOOKS</a>
+<a href="/lib/new" class="nav_link">ADD NEW BOOKS</a>
 <br><br>
-<a href="/logout">LOG OUT</a>
+<a href="/logout" class="nav_link">LOG OUT</a>
