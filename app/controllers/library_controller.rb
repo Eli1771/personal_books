@@ -7,6 +7,7 @@ class LibraryController < ApplicationController
       @books = Book.all.select {|book| book.user == current_user}
       erb :'/library/index'
     else
+      flash[:message] = "'flash_bad'>You must be logged in to view your library"
       redirect to '/login'
     end
   end
@@ -20,6 +21,7 @@ class LibraryController < ApplicationController
       @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
       erb :'/library/new'
     else
+      flash[:message] = "'flash_bad'>You must be logged in to add books"
       redirect to '/login'
     end
   end
@@ -60,10 +62,7 @@ class LibraryController < ApplicationController
 
     #now render the array into one big error message
     #it should read in HTML as one or more <h3>'s
-    if @error_message.count == 1
-      flash[:message] = @error_message.first
-      redirect to '/lib/new'
-    else
+    if @error_message.count > 0
       flash[:message] = @error_message.join('</h3><h3 class=')
       redirect to '/lib/new'
     end
@@ -92,6 +91,7 @@ class LibraryController < ApplicationController
     @book.user = User.find_by_id(session[:user_id])
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
+    flash[:message] = "'flash_good'>Successfully added #{@book.title} to your library! "
     redirect to '/lib'
   end
 
@@ -101,6 +101,7 @@ class LibraryController < ApplicationController
       @rooms = @user.rooms
       erb :'/library/show'
     else
+      flash[:message] = "'flash_bad'>You must be logged in to view your library"
       redirect to '/login'
     end
   end
@@ -117,6 +118,7 @@ class LibraryController < ApplicationController
         redirect to '/lib'
       end
     else
+      flash[:message] = "'flash_bad'>You must be logged in to view your library"
       redirect to '/login'
     end
   end
@@ -133,6 +135,7 @@ class LibraryController < ApplicationController
         redirect to '/lib'
       end
     else
+      flash[:message] = "'flash_bad'>You must be logged in to view your library"
       redirect to '/login'
     end
   end
@@ -147,6 +150,7 @@ class LibraryController < ApplicationController
         redirect to '/lib'
       end
     else
+      flash[:message] = "'flash_bad'>You must be logged in to view your library"
       redirect to '/login'
     end
   end
@@ -161,11 +165,52 @@ class LibraryController < ApplicationController
       @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
       erb :'/library/edit'
     else
+      flash[:message] = "'flash_bad'>You can only edit your own books!"
       redirect to '/lib'
     end
   end
 
   patch '/lib/book/:id' do
+    #error handling first
+    @error_message = []
+    if params["book"]["title"].empty?
+      @error_message << "'flash_bad'>A Title is required"
+    end
+    if params["author"]["name"].empty? && params["book"]["author_ids"].nil?
+      @error_message << "'flash_bad'>An Author is required"
+    end
+    if params["topic"]["name"].empty? && params["book"]["topic_id"].nil?
+      @error_message << "'flash_bad'>A Topic is required"
+    end
+    if params["book"]["shelf_id"].empty?
+      @error_message << "'flash_bad'>Please indicate which shelf your book is on"
+    end
+    if params["case"]["name"].empty? && params["book"]["case_id"].nil?
+      @error_message << "'flash_bad'>Please indicate which bookcase your book is in"
+    end
+    if !params["case"]["name"].empty? && params["case"]["shelf_count"].empty?
+      @error_message << "'flash_bad'>A shelf count is required to create a new bookcase"
+    end
+    if !params["case"]["name"].empty? && params["room"]["name"].empty? && params["case"]["room_id"].nil?
+      @error_message << "'flash_bad'>Please indicate which room your new shelf is located in"
+      #if you select a case, but the shelf number is higher than the number of available shelves for that case
+    end
+    if params["case"]["name"].empty? && !params["book"]["case_id"].nil? && params["book"]["shelf_id"].to_i > Case.find_by_id(params["book"]["case_id"]).shelf_count
+      @case_error = Case.find_by_id(params["book"]["case_id"])
+      @error_message << "'flash_bad'>That shelf is not available for Case #{@case_error.name} in #{@case_error.room.name}"
+      #if you create a case with a shelf count, but the book location is higher than the nuber of available shelves for your new case
+    end
+    if !params["case"]["name"].empty? && !params["case"]["shelf_count"].empty? && params["book"]["shelf_id"].to_i > params["case"]["shelf_count"].to_i
+      @error_message << "'flash_bad'>That shelf is not available for your new Bookcase"
+    end
+
+    #now render the array into one big error message
+    #it should read in HTML as one or more <h3>'s
+    if @error_message.count > 0
+      flash[:message] = @error_message.join('</h3><h3 class=')
+      redirect to '/lib/new'
+    end
+
     #binding.pry
     @user = User.find_by_id(session[:user_id])
     @book = Book.find_by_id(params[:id])
@@ -194,12 +239,15 @@ class LibraryController < ApplicationController
     @book.user = User.find_by_id(session[:user_id])
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
+    flash[:message] = "'flash_good'>Successfully edited #{@book.title}!"
     redirect to "/lib/book/#{@book.id}"
   end
 
   delete '/lib/book/:id' do
     @book = Book.find_by_id(params[:id])
+    @title = @book.title
     @book.delete
+    flash[:message] = "'flash_good'>Successfully deleted #{@title}!"
     redirect to '/lib'
   end
 end

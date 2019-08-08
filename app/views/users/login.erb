@@ -12,8 +12,18 @@
     color:black;
   }
 
+  .flash_good {
+    color: green;
+  }
+  .flash_bad {
+    color: red;
+  }
+
 </style>
 
+<% if flash.has?(:message) %>
+  <%= "<h3 class=#{flash[:message]}</h3>" %>
+<% end %>
 
 <h1>Log In to View Your Library</h1>
 
