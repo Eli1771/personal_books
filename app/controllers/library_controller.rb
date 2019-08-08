@@ -32,7 +32,7 @@ class LibraryController < ApplicationController
     elsif params["author"]["name"].empty? && params["book"]["author_ids"].nil?
       flash[:message] = "'flash_bad'>An Author is required"
       redirect to '/lib/new'
-    elsif params["topic"]["name"].empty? && parms["book"]["topic_id"].nil?
+    elsif params["topic"]["name"].empty? && params["book"]["topic_id"].nil?
       flash[:message] = "'flash_bad'>A Topic is required"
       redirect to '/lib/new'
     elsif params["book"]["shelf_id"].empty?
@@ -46,6 +46,15 @@ class LibraryController < ApplicationController
       redirect to '/lib/new'
     elsif !params["case"]["name"].empty? && params["room"]["name"].empty? && params["case"]["room_id"].nil?
       flash[:message] = "'flash_bad'>Please indicate which room your new shelf is located in"
+      redirect to '/lib/new'
+      #if you select a case, but the shelf number is higher than the number of available shelves for that case
+    elsif params["case"]["name"].empty? && !params["book"]["case_id"].nil? && params["book"]["shelf_id"].to_i > Case.find_by_id(params["book"]["case_id"]).shelf_count
+      @case_error = Case.find_by_id(params["book"]["case_id"])
+      flash[:message] = "'flash_bad'>That shelf is not available for Case #{@case_error.name} in #{@case_error.room.name}"
+      redirect to '/lib/new'
+      #if you create a case with a shelf count, but the book location is higher than the nuber of available shelves for your new case
+    elsif !params["case"]["name"].empty? && !params["case"]["shelf_count"].empty? && params["book"]["shelf_id"].to_i > params["case"]["shelf_count"].to_i
+      flash[:message] = "'flash_bad'>That shelf is not available for your new Bookcase"
       redirect to '/lib/new'
     end
 
