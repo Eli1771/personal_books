@@ -98,10 +98,11 @@ class LibraryController < ApplicationController
   get '/lib/book/:id/edit' do
     @book = Book.find_by_id(params[:id])
     if logged_in? && current_user == @book.user
-      @authors = Author.all
-      @topics = Topic.all
-      @rooms = Room.all
-      @cases = Case.all
+      @books = Book.all.select {|book| book.user == current_user}
+      @authors = Author.all.select {|author| author.books.any? {|book| book.user == current_user}}
+      @topics = Topic.all.select {|topic| topic.books.any? {|book| book.user == current_user}}
+      @rooms = Room.all.select {|room| room.user == current_user}
+      @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
       erb :'/library/edit'
     else
       redirect to '/lib'
