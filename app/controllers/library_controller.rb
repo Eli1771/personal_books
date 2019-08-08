@@ -1,4 +1,6 @@
 class LibraryController < ApplicationController
+  use Rack::Flash
+  
   get '/lib' do
     if logged_in?
       #binding.pry
@@ -23,7 +25,6 @@ class LibraryController < ApplicationController
   end
 
   post '/lib' do
-    #binding.pry
     @book = Book.create(params[:book])
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
@@ -48,6 +49,8 @@ class LibraryController < ApplicationController
     @book.user = User.find_by_id(session[:user_id])
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
+
+    flash[:message] = "Successfully added book"
     redirect to '/lib'
   end
 
