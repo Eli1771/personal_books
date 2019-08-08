@@ -26,35 +26,45 @@ class LibraryController < ApplicationController
 
   post '/lib' do
     #error handling first
+    @error_message = []
     if params["book"]["title"].empty?
-      flash[:message] = "'flash_bad'>A Title is required"
-      redirect to '/lib/new'
-    elsif params["author"]["name"].empty? && params["book"]["author_ids"].nil?
-      flash[:message] = "'flash_bad'>An Author is required"
-      redirect to '/lib/new'
-    elsif params["topic"]["name"].empty? && params["book"]["topic_id"].nil?
-      flash[:message] = "'flash_bad'>A Topic is required"
-      redirect to '/lib/new'
-    elsif params["book"]["shelf_id"].empty?
-      flash[:message] = "'flash_bad'>Please indicate which shelf your book is on"
-      redirect to '/lib/new'
-    elsif params["case"]["name"].empty? && params["book"]["case_id"].nil?
-      flash[:message] = "'flash_bad'>Please indicate which bookcase your book is in"
-      redirect to '/lib/new'
-    elsif !params["case"]["name"].empty? && params["case"]["shelf_count"].empty?
-      flash[:message] = "'flash_bad'>A shelf count is required to create a new bookcase"
-      redirect to '/lib/new'
-    elsif !params["case"]["name"].empty? && params["room"]["name"].empty? && params["case"]["room_id"].nil?
-      flash[:message] = "'flash_bad'>Please indicate which room your new shelf is located in"
-      redirect to '/lib/new'
+      @error_message << "'flash_bad'>A Title is required"
+    end
+    if params["author"]["name"].empty? && params["book"]["author_ids"].nil?
+      @error_message << "'flash_bad'>An Author is required"
+    end
+    if params["topic"]["name"].empty? && params["book"]["topic_id"].nil?
+      @error_message << "'flash_bad'>A Topic is required"
+    end
+    if params["book"]["shelf_id"].empty?
+      @error_message << "'flash_bad'>Please indicate which shelf your book is on"
+    end
+    if params["case"]["name"].empty? && params["book"]["case_id"].nil?
+      @error_message << "'flash_bad'>Please indicate which bookcase your book is in"
+    end
+    if !params["case"]["name"].empty? && params["case"]["shelf_count"].empty?
+      @error_message << "'flash_bad'>A shelf count is required to create a new bookcase"
+    end
+    if !params["case"]["name"].empty? && params["room"]["name"].empty? && params["case"]["room_id"].nil?
+      @error_message << "'flash_bad'>Please indicate which room your new shelf is located in"
       #if you select a case, but the shelf number is higher than the number of available shelves for that case
-    elsif params["case"]["name"].empty? && !params["book"]["case_id"].nil? && params["book"]["shelf_id"].to_i > Case.find_by_id(params["book"]["case_id"]).shelf_count
+    end
+    if params["case"]["name"].empty? && !params["book"]["case_id"].nil? && params["book"]["shelf_id"].to_i > Case.find_by_id(params["book"]["case_id"]).shelf_count
       @case_error = Case.find_by_id(params["book"]["case_id"])
-      flash[:message] = "'flash_bad'>That shelf is not available for Case #{@case_error.name} in #{@case_error.room.name}"
-      redirect to '/lib/new'
+      @error_message << "'flash_bad'>That shelf is not available for Case #{@case_error.name} in #{@case_error.room.name}"
       #if you create a case with a shelf count, but the book location is higher than the nuber of available shelves for your new case
-    elsif !params["case"]["name"].empty? && !params["case"]["shelf_count"].empty? && params["book"]["shelf_id"].to_i > params["case"]["shelf_count"].to_i
-      flash[:message] = "'flash_bad'>That shelf is not available for your new Bookcase"
+    end
+    if !params["case"]["name"].empty? && !params["case"]["shelf_count"].empty? && params["book"]["shelf_id"].to_i > params["case"]["shelf_count"].to_i
+      @error_message << "'flash_bad'>That shelf is not available for your new Bookcase"
+    end
+
+    #now render the array into one big error message
+    #it should read in HTML as one or more <h3>'s
+    if @error_message.count == 1
+      flash[:message] = @error_message.first
+      redirect to '/lib/new'
+    else
+      flash[:message] = @error_message.join('</h3><h3 class=')
       redirect to '/lib/new'
     end
 
