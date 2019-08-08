@@ -1,8 +1,11 @@
 class UserController < ApplicationController
+  use Rack::Flash
+
   get '/signup' do
     if !logged_in?
       erb :'/users/create_user'
     else
+      flash[:message] = "'flash_good'>You must first sign out to create a new user"
       redirect to '/lib'
     end
   end
@@ -13,6 +16,7 @@ class UserController < ApplicationController
       session[:user_id] = @user.id
       redirect to '/lib/new'
     else
+      flash[:message] = "'flash_bad>'Please fill out all fields"
       redirect to '/signup'
     end
   end
@@ -21,6 +25,7 @@ class UserController < ApplicationController
     if !logged_in?
       erb :'/users/login'
     else
+      flash[:message] = "'flash_good'>You are already logged in!"
       redirect to '/lib'
     end
   end
@@ -31,6 +36,7 @@ class UserController < ApplicationController
       session[:user_id] = user.id
       redirect to '/lib'
     else
+      flash[:message] = "'flash_bad>'Please try again"
       redirect to '/login'
     end
   end
@@ -39,6 +45,7 @@ class UserController < ApplicationController
     if logged_in?
       erb :'/users/logout'
     else
+      flash[:message] = "'flash_bad>'You are already logged out"
       redirect to '/login'
     end
   end
