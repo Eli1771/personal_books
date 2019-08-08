@@ -76,7 +76,7 @@
   </div>
 </div>
 
-<form action="/lib/book/<%= @book.id %>" method="post">
+<form action="/lib/book/<%= @book.id %>" method="post" style="display: <%= @book.user == current_user ? 'inherit' : 'none' %>">
   <input type="hidden" id="hidden" name="_method" value="DELETE">
   <input type="submit" value="Delete" id="delete">
 </form>

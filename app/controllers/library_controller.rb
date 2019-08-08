@@ -1,16 +1,21 @@
 class LibraryController < ApplicationController
   get '/lib' do
-    #binding.pry
-    @books = Book.all.select {|book| book.user_id == session[:user_id]}
-    erb :'/library/index'
+    if logged_in?
+      #binding.pry
+      @books = Book.all.select {|book| book.user == current_user}
+      erb :'/library/index'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/lib/new' do
     if logged_in?
-      @authors = Author.all
-      @topics = Topic.all
-      @rooms = Room.all
-      @cases = Case.all
+      @books = Book.all.select {|book| book.user == current_user}
+      @authors = Author.all.select {|author| author.books.any? {|book| book.user == current_user}}
+      @topics = Topic.all.select {|topic| topic.books.any? {|book| book.user == current_user}}
+      @rooms = Room.all.select {|room| room.user == current_user}
+      @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
       erb :'/library/new'
     else
       redirect to '/login'
@@ -47,39 +52,60 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/show' do
-    @user = User.find_by_id(session[:user_id])
-    @rooms = @user.rooms
-    erb :'/library/show'
+    if logged_in? && current_user.id == session[:user_id]
+      @user = User.find_by_id(session[:user_id])
+      @rooms = @user.rooms
+      erb :'/library/show'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/lib/room/:id' do
-    #slug room names?
-    @user = User.find_by_id(session[:user_id])
-    @room = Room.find_by_id(params[:id])
-    @cases = @room.cases
-    erb :'/library/show/room'
+    if logged_in? && current_user.id == session[:user_id]
+      #slug room names?
+      @user = User.find_by_id(session[:user_id])
+      @room = Room.find_by_id(params[:id])
+      @cases = @room.cases
+      erb :'/library/show/room'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/lib/case/:id' do
-    @user = User.find_by_id(session[:user_id])
-    @case = Case.find_by_id(params[:id])
-    @books = @case.books
-    erb :'/library/show/bookcase'
+    #binding.pry
+    if logged_in? && current_user.id == session[:user_id]
+      @user = User.find_by_id(session[:user_id])
+      @case = Case.find_by_id(params[:id])
+      @books = @case.books
+      erb :'/library/show/bookcase'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/lib/book/:id' do
-    @user = User.find_by_id(session[:user_id])
-    @book = Book.find_by_id(params[:id])
-    erb :'/library/show/book'
+    if logged_in? && current_user.id == session[:user_id]
+      @user = User.find_by_id(session[:user_id])
+      @book = Book.find_by_id(params[:id])
+      erb :'/library/show/book'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/lib/book/:id/edit' do
     @book = Book.find_by_id(params[:id])
-    @authors = Author.all
-    @topics = Topic.all
-    @rooms = Room.all
-    @cases = Case.all
-    erb :'/library/edit'
+    if logged_in? && current_user == @book.user
+      @authors = Author.all
+      @topics = Topic.all
+      @rooms = Room.all
+      @cases = Case.all
+      erb :'/library/edit'
+    else
+      redirect to '/lib'
+    end
   end
 
   patch '/lib/book/:id' do
