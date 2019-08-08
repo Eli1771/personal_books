@@ -115,6 +115,7 @@ class LibraryController < ApplicationController
         @cases = @room.cases
         erb :'/library/show/room'
       else
+        flash[:message] = "'flash_bad'>You may only view your own books"
         redirect to '/lib'
       end
     else
@@ -132,6 +133,7 @@ class LibraryController < ApplicationController
         @books = @case.books
         erb :'/library/show/bookcase'
       else
+        flash[:message] = "'flash_bad'>You may only view your own library"
         redirect to '/lib'
       end
     else
@@ -147,6 +149,7 @@ class LibraryController < ApplicationController
       if @book.user == @user
         erb :'/library/show/book'
       else
+        flash[:message] = "'flash_bad'>You may only view your own books"
         redirect to '/lib'
       end
     else
