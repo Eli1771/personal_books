@@ -52,7 +52,7 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/show' do
-    if logged_in? && current_user.id == session[:user_id]
+    if logged_in?
       @user = User.find_by_id(session[:user_id])
       @rooms = @user.rooms
       erb :'/library/show'
@@ -62,12 +62,16 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/room/:id' do
-    if logged_in? && current_user.id == session[:user_id]
+    if logged_in?
       #slug room names?
       @user = User.find_by_id(session[:user_id])
       @room = Room.find_by_id(params[:id])
-      @cases = @room.cases
-      erb :'/library/show/room'
+      if @user.rooms.include?(@room)
+        @cases = @room.cases
+        erb :'/library/show/room'
+      else
+        redirect to '/lib'
+      end
     else
       redirect to '/login'
     end
@@ -75,21 +79,29 @@ class LibraryController < ApplicationController
 
   get '/lib/case/:id' do
     #binding.pry
-    if logged_in? && current_user.id == session[:user_id]
+    if logged_in?
       @user = User.find_by_id(session[:user_id])
       @case = Case.find_by_id(params[:id])
-      @books = @case.books
-      erb :'/library/show/bookcase'
+      if @user.rooms.include?(@case.room)
+        @books = @case.books
+        erb :'/library/show/bookcase'
+      else
+        redirect to '/lib'
+      end
     else
       redirect to '/login'
     end
   end
 
   get '/lib/book/:id' do
-    if logged_in? && current_user.id == session[:user_id]
+    if logged_in?
       @user = User.find_by_id(session[:user_id])
       @book = Book.find_by_id(params[:id])
-      erb :'/library/show/book'
+      if @book.user == @user
+        erb :'/library/show/book'
+      else
+        redirect to '/lib'
+      end
     else
       redirect to '/login'
     end
