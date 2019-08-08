@@ -26,8 +26,26 @@ class LibraryController < ApplicationController
 
   post '/lib' do
     #error handling first
-    if params["book"]["shelf_id"].empty?
+    if params["book"]["title"].empty?
+      flash[:message] = "'flash_bad'>A Title is required"
+      redirect to '/lib/new'
+    elsif params["author"]["name"].empty? && params["book"]["author_ids"].nil?
+      flash[:message] = "'flash_bad'>An Author is required"
+      redirect to '/lib/new'
+    elsif params["topic"]["name"].empty? && parms["book"]["topic_id"].nil?
+      flash[:message] = "'flash_bad'>A Topic is required"
+      redirect to '/lib/new'
+    elsif params["book"]["shelf_id"].empty?
       flash[:message] = "'flash_bad'>Please indicate which shelf your book is on"
+      redirect to '/lib/new'
+    elsif params["case"]["name"].empty? && params["book"]["case_id"].nil?
+      flash[:message] = "'flash_bad'>Please indicate which bookcase your book is in"
+      redirect to '/lib/new'
+    elsif !params["case"]["name"].empty? && params["case"]["shelf_count"].empty?
+      flash[:message] = "'flash_bad'>A shelf count is required to create a new bookcase"
+      redirect to '/lib/new'
+    elsif !params["case"]["name"].empty? && params["room"]["name"].empty? && params["case"]["room_id"].nil?
+      flash[:message] = "'flash_bad'>Please indicate which room your new shelf is located in"
       redirect to '/lib/new'
     end
 
