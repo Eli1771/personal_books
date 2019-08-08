@@ -27,7 +27,18 @@
     color:black;
   }
 
+  .flash_good {
+    color: green;
+  }
+  .flash_bad {
+    color: red;
+  }
+
 </style>
+
+<% if flash.has?(:message) %>
+  <%= "<h3 class=#{flash[:message]}</h3>" %>
+<% end %>
 
 <h1>Start building your library!</h1>
 
@@ -101,8 +112,6 @@
 
 </form>
 
-<br><br>
-<a href="/lib/new" class="nav_link">ADD MORE BOOKS</a>
 <br><br>
 <a href="/lib/show" class="nav_link">VIEW LIBRARY</a>
 <br><br>
