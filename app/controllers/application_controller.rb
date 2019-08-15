@@ -24,7 +24,21 @@ class ApplicationController < Sinatra::Base
     end
 
     def current_user
-      User.find_by_id(session[:user_id])
+      user ||= User.find_by_id(session[:user_id])
+    end
+
+    def redirect_if_not_logged_in
+      if !logged_in?
+        flash[:message] = "'flash_bad'>You must be logged in to view your library"
+        redirect to '/login'
+      end
+    end
+
+    def redirect_if_not_authorized(book_user)
+      if current_user != book_user
+        flash[:message] = "'flash_bad'>You can only alter your own library!"
+        redirect to '/lib'
+      end
     end
   end
 end

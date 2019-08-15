@@ -11,12 +11,12 @@ class UserController < ApplicationController
   end
 
   post '/signup' do
-    if !params.values.any?("")
+    if !params.values.any?("") && !User.find_by(username: params[:username])
       @user = User.create(params)
       session[:user_id] = @user.id
       redirect to '/lib/new'
     else
-      flash[:message] = "'flash_bad>'Please fill out all fields"
+      flash[:message] = "'flash_bad'>Please fill out all fields"
       redirect to '/signup'
     end
   end
@@ -36,7 +36,7 @@ class UserController < ApplicationController
       session[:user_id] = user.id
       redirect to '/lib'
     else
-      flash[:message] = "'flash_bad>'Please try again"
+      flash[:message] = "'flash_bad'>Please try again"
       redirect to '/login'
     end
   end
@@ -45,7 +45,7 @@ class UserController < ApplicationController
     if logged_in?
       erb :'/users/logout'
     else
-      flash[:message] = "'flash_bad>'You are already logged out"
+      flash[:message] = "'flash_bad'>You are already logged out"
       redirect to '/login'
     end
   end

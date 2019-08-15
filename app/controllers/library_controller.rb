@@ -2,28 +2,19 @@ class LibraryController < ApplicationController
   use Rack::Flash
 
   get '/lib' do
-    if logged_in?
-      #binding.pry
-      @books = Book.all.select {|book| book.user == current_user}
-      erb :'/library/index'
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to view your library"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    @books = Book.all.select {|book| book.user == current_user}
+    erb :'/library/index'
   end
 
   get '/lib/new' do
-    if logged_in?
-      @books = Book.all.select {|book| book.user == current_user}
-      @authors = Author.all.select {|author| author.books.any? {|book| book.user == current_user}}
-      @topics = Topic.all.select {|topic| topic.books.any? {|book| book.user == current_user}}
-      @rooms = Room.all.select {|room| room.user == current_user}
-      @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
-      erb :'/library/new'
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to add books"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    @books = current_user.books.sort_by {|book| book.title.to_s}
+    @authors = current_user.authors.sort_by {|author| author.name.to_s}
+    @topics = current_user.topics.sort_by {|topic| topic.name.to_s}
+    @rooms = current_user.rooms.sort_by {|room| room.name.to_s}
+    @cases = current_user.cases.sort_by {|bookcase| bookcase.name.to_s}
+    erb :'/library/new'
   end
 
   post '/lib' do
@@ -71,24 +62,28 @@ class LibraryController < ApplicationController
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
       @book.authors << @author
+      @author.user_id = current_user.id
+      @author.save
     end
     if !params["topic"]["name"].empty?
       @topic = Topic.find_or_create_by(params["topic"])
       @book.topic = @topic
+      @topic.user_id = current_user.id
       @book.save
     end
-    if !params["case"]["name"].empty? #<--Logic to prevent user from entering unavailable shelf
+    if !params["case"]["name"].empty?
       @case = Case.find_or_create_by(params["case"])
       @book.case = @case
       @book.save
       if !params["room"]["name"].empty?
         @room = Room.find_or_create_by(params["room"])
         @case.room = @room
+        @case.user_id = current_user.id
         @case.save
       end
     end
     @book.room_id = @book.case.room.id
-    @book.user = User.find_by_id(session[:user_id])
+    @book.user = current_user
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
     flash[:message] = "'flash_good'>Successfully added #{@book.title} to your library! "
@@ -96,84 +91,51 @@ class LibraryController < ApplicationController
   end
 
   get '/lib/show' do
-    if logged_in?
-      @user = User.find_by_id(session[:user_id])
-      @rooms = @user.rooms
-      erb :'/library/show'
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to view your library"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    @user = current_user
+    @rooms = @user.rooms.sort_by {|room| room.name.to_s}
+    erb :'/library/show'
   end
 
   get '/lib/room/:id' do
-    if logged_in?
-      #slug room names?
-      @user = User.find_by_id(session[:user_id])
-      @room = Room.find_by_id(params[:id])
-      if @user.rooms.include?(@room)
-        @cases = @room.cases
-        erb :'/library/show/room'
-      else
-        flash[:message] = "'flash_bad'>You may only view your own books"
-        redirect to '/lib'
-      end
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to view your library"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    #slug room names?
+    @user = current_user
+    @room = Room.find_by_id(params[:id])
+    @cases = @room.cases.sort_by {|bookcase| bookcase.name.to_s}
+    erb :'/library/show/room'
   end
 
-  get '/lib/case/:id' do
+  get '/lib/case/:id' do #<-- sort by shelf, then alphabet
     #binding.pry
-    if logged_in?
-      @user = User.find_by_id(session[:user_id])
-      @case = Case.find_by_id(params[:id])
-      if @user.rooms.include?(@case.room)
-        @books = @case.books
-        erb :'/library/show/bookcase'
-      else
-        flash[:message] = "'flash_bad'>You may only view your own library"
-        redirect to '/lib'
-      end
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to view your library"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    @user = current_user
+    @case = Case.find_by_id(params[:id])
+    @books = @case.books.sort_by {|book| book.title.to_s}
+    erb :'/library/show/bookcase'
   end
 
   get '/lib/book/:id' do
-    if logged_in?
-      @user = User.find_by_id(session[:user_id])
-      @book = Book.find_by_id(params[:id])
-      if @book.user == @user
-        erb :'/library/show/book'
-      else
-        flash[:message] = "'flash_bad'>You may only view your own books"
-        redirect to '/lib'
-      end
-    else
-      flash[:message] = "'flash_bad'>You must be logged in to view your library"
-      redirect to '/login'
-    end
+    redirect_if_not_logged_in
+    @user = current_user
+    @book = Book.find_by_id(params[:id])
+    erb :'/library/show/book'
   end
 
   get '/lib/book/:id/edit' do
     @book = Book.find_by_id(params[:id])
-    if logged_in? && current_user == @book.user
-      @books = Book.all.select {|book| book.user == current_user}
-      @authors = Author.all.select {|author| author.books.any? {|book| book.user == current_user}}
-      @topics = Topic.all.select {|topic| topic.books.any? {|book| book.user == current_user}}
-      @rooms = Room.all.select {|room| room.user == current_user}
-      @cases = Case.all.select {|bookcase| bookcase.room.user == current_user}
-      erb :'/library/edit'
-    else
-      flash[:message] = "'flash_bad'>You can only edit your own books!"
-      redirect to '/lib'
-    end
+    redirect_if_not_authorized(@book.user)
+    @books = current_user.books.sort_by {|book| book.title.to_s}
+    @authors = current_user.authors.sort_by {|author| author.name.to_s}
+    @topics = current_user.topics.sort_by {|topic| topic.name.to_s}
+    @rooms = current_user.rooms.sort_by {|room| room.name.to_s}
+    @cases = current_user.cases.sort_by {|bookcase| bookcase.name.to_s}
+    erb :'/library/edit'
   end
 
   patch '/lib/book/:id' do
+    @book = Book.find_by_id(params[:id])
+    redirect_if_not_authorized(@book.user)
     #error handling first
     @error_message = []
     if params["book"]["title"].empty?
@@ -215,17 +177,19 @@ class LibraryController < ApplicationController
     end
 
     #binding.pry
-    @user = User.find_by_id(session[:user_id])
-    @book = Book.find_by_id(params[:id])
+    @user = current_user
     @book.update(params[:book])
 
     if !params["author"]["name"].empty?
       @author = Author.find_or_create_by(params["author"])
       @book.authors << @author
+      @author.user_id = current_user.id
+      @author.save
     end
     if !params["topic"]["name"].empty?
       @topic = Topic.find_or_create_by(params["topic"])
       @book.topic = @topic
+      @topic.user_id = current_user.id
       @book.save
     end
     if !params["case"]["name"].empty? #<--Logic to prevent user from entering unavailable shelf
@@ -235,11 +199,12 @@ class LibraryController < ApplicationController
       if !params["room"]["name"].empty?
         @room = Room.find_or_create_by(params["room"])
         @case.room = @room
+        @case.user_id = current_user.id
         @case.save
       end
     end
     @book.room_id = @book.case.room.id
-    @book.user = User.find_by_id(session[:user_id])
+    @book.user = current_user
     @book.user.rooms << Room.find_by_id(@book.room_id)
     @book.save
     flash[:message] = "'flash_good'>Successfully edited #{@book.title}!"
@@ -248,6 +213,7 @@ class LibraryController < ApplicationController
 
   delete '/lib/book/:id' do
     @book = Book.find_by_id(params[:id])
+    redirect_if_not_authorized(@book.user)
     @title = @book.title
     @book.delete
     flash[:message] = "'flash_good'>Successfully deleted #{@title}!"

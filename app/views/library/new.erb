@@ -52,7 +52,7 @@
       <input type="text" name="book[title]" id="book_title"><br><br>
 
       <%= '<h4>Select Author(s)</h4>' if !@authors.empty? %>
-      <% @authors.sort_by {|author| author.name}.each do |author| %>
+      <% @authors.each do |author| %>
         <input type="checkbox" name="book[author_ids][]" value="<%= author.id %>" id="author_<%= author.id %>">
         <label for="author_<%= author.id %>"><%= author.name %></label><br>
       <% end %>
@@ -62,7 +62,7 @@
       <input type="text" name="author[name]" id="book_authors"><br><br>
 
       <%= '<h4>Select a Topic</h4>' if !@topics.empty? %>
-      <% @topics.sort_by {|topic| topic.name}.each do |topic| %>
+      <% @topics.each do |topic| %>
         <input type="radio" name="book[topic_id]" value="<%= topic.id %>" id="topic_<%= topic.id %>">
         <label for="topic_<%= topic.id %>"><%= topic.name %></label><br>
       <% end %>
@@ -76,7 +76,7 @@
       <h3><%= 'Select or' if !Case.all.empty? %> Create Location</h3>
       <!--case-->
       <%= '<h4>Select Your Case</h4>' if !@cases.empty? %>
-      <% @cases.sort_by {|bookcase| bookcase.room.name}.each do |bookcase| %>
+      <% @cases.each do |bookcase| %>
         <input type="radio" name="book[case_id]" value="<%= bookcase.id %>" id="case_<%= bookcase.id %>">
         <label for="case_<%= bookcase.id %>">
         <%= bookcase.name %> (<%= bookcase.shelf_count %> shelves) - In <%= bookcase.room.name %></label><br>
@@ -92,7 +92,7 @@
 
       <!--select room-->
       <%= '<h4>Select the room that your case is located in</h4>' if !@rooms.empty? %>
-      <% @rooms.sort_by {|room| room.name}.each do |room| %>
+      <% @rooms.each do |room| %>
         <input type="radio" name="case[room_id]" value="<%= room.id %>" id="room_<%= room.id %>">
         <label for="room_<%= room.id %>"><%= room.name %></label>
       <% end %>
