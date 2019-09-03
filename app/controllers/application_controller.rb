@@ -41,4 +41,10 @@ class ApplicationController < Sinatra::Base
       end
     end
   end
+
+
+  get '/test/show' do
+    @out = CsvParser.parse
+    erb :'/test/show'
+  end
 end
