@@ -3,7 +3,7 @@ require 'csv'
 
 class CsvParser
 
-  #@@vhp = File.open('vhp_test_data.csv', 'r')
+  #vhp = File.open('vhp_test_data.csv', 'r')
 
   def self.clear_library
     Book.all.each {|b| b.delete}
@@ -20,34 +20,67 @@ class CsvParser
 
   def call
     #actually does all the parsing
-    @as_array = CSV.parse(@@vhp)
-    @for_out = []
+    as_array = CSV.parse(@@vhp)
+    for_out = []
 
-    @as_array.each do |row|
-      @book = make_book(row)
-      @for_out << @book
+    as_array.each do |row|
+      book = make_book(row)
+      for_out << book
     end
-    @for_out
+    for_out
   end
 
   def make_book(row)
-    @book = Book.new(title: row[0])
+    #stub book
+    book = Book.new(title: row[0])
+    #grab user
+    user = User.find_by_id(8)
+    #create room w/ associations
+    room = Room.find_or_create_by(name: row[4])
+    associate_user(room, user)
+    #create case w/ associations
+    bookcase = Case.find_or_create_by(name: row[5])
+    bookcase.room_id = room.id
+    if bookcase.shelf_count && bookcase.shelf_count < row[6]
+      bookcase.shelf_count = row[6]
+    end
+    associate_user(bookcase, user)
+    #create authors array containing Author objects
+    authors = []
+    author_name = "#{row[1]} + #{row[2]}"
+    if author_name.include?('&')
+      author_names = author_name.split(' & ')
+      author_names.each do |name|
+        author = Author.find_or_create_by(name: name)
+        associate_user(author, user)
+        authors << author
+      end
+    else
+      author = Author.find_or_create_by(name: author_name)
+      associate_user(author, user)
+      authors << author
+    end
+    #create topic w/ associations
+    topic = Topic.find_or_create_by(name: row[3])
+    associate_user(topic, user)
+    #assign all attributes to book stub
+    book.case_id = bookcase.id
+    book.shelf_id = row[6]
+    book.room_id = room.id
+    book.topic_id = topic.id
+    book.user_id = user.id
+    #create join objects for books/authors
+    authors.each do |author|
+      BookAuthor.create(book_id: book.id, author_id: author.id)
+    end
+    #save and return book
+    book.save
+    book
+  end
 
-    @bookcase = Case.find_or_create_by(name: row[5])
-    @room = Room.find_or_create_by(name: row[4])
-    @author_name = "#{row[1]} + #{row[2]}"
-    @author = Author.find_or_create_by(name: @author_name)
-    @topic = Topic.find_or_create_by(name: row[3])
-
-    @book.case_id = @bookcase.id
-    @book.shelf_id = row[6]
-    @book.room_id = @room.id
-    @book.topic_id = @topic.id
-    @book.user_id = 8
-
-    BookAuthor.create(book_id: @book.id, author_id: @author.id)
-    @book.save
-    @book
+  def associate_user(model, user)
+    model.user_id = user.id
+    model.save
   end
 
 
