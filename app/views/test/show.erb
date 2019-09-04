@@ -1,6 +1,6 @@
 <h1>I'm parsing!</h1>
 <ol>
   <% @out.each do |row| %>
-    <li><%= row %></li>
+    <li><%= row.title %> - <%= row.topic.name %> - Case: <%= row.case.name %> - Shelf: <%= row.shelf_id %></li>
   <% end %>
 </ol>
