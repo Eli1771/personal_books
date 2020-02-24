@@ -11,3 +11,17 @@ Fix flash_bad messages in UserController
 Abstract out styles
 
 error handle for bad paths
+
+
+**NEW FILETREE**
+
+ROOT //personal_books
+  |
+  L books-backend
+    |
+    L app
+    L etc.
+  L books-frontend
+    |
+    L src
+    L etc
